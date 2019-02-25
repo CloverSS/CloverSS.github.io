@@ -89,7 +89,7 @@
 <p>Note:<br>s could be empty and contains only lowercase letters a-z.<br>p could be empty and contains only lowercase letters a-z, and characters like ? or *.</p>
 <p>Example 1:<br>Input:<br>s = “aa”<br>p = “a”<br>Output: false<br>Explanation: “a” does not match the entire string “aa”.</p>
 <p><strong>解题思路</strong><br>    一道简化版的字符串匹配问题，采用动态规划的思路。s.size()=n,p.size()=m,使用一个二维数组res[n][m]，记录s的前i个字符是否与p的前j个字符相匹配。循环遍历p中字符，若p[j]为字母且与s[i]相同或p[j]为”?”，则res[i][j]=res[i-1][j-1]。若p[j]为”*”，则若有p[i][j-1]=1,则所有k&gt;i，p[k][j-1]=1。</p>
-<p>举例：<strong>s:abadef   p:ab?*f</strong><br>| s\p  | 0 | 1 | 2 | 3 | 4 | 5 |<br>| ——–   | —–:  | :—-:  |<br>| 0 | 1 | 0 | 0 | 0 | 0 | 0 |<br>| 1 | 0 | 1 | 0 | 0 | 0 | 0 |<br>| 2 | 0 | 0 | 1 | 0 | 0 | 0 |<br>| 3 | 0 | 0 | 0 | 1 | 1 | 0 |<br>| 4 | 0 | 0 | 0 | 0 | 1 | 0 |<br>| 5 | 0 | 0 | 0 | 0 | 1 | 0 |<br>| 6 | 0 | 0 | 0 | 0 | 1 | 1 |</p>
+<p>举例：<strong>s:abadef   p:ab?*f</strong><br>| s\p  | 0 | 1 | 2 | 3 | 4 | 5 |<br>| —  |—|—|—|—|—|—|<br>| 0 | 1 | 0 | 0 | 0 | 0 | 0 |<br>| 1 | 0 | 1 | 0 | 0 | 0 | 0 |<br>| 2 | 0 | 0 | 1 | 0 | 0 | 0 |<br>| 3 | 0 | 0 | 0 | 1 | 1 | 0 |<br>| 4 | 0 | 0 | 0 | 0 | 1 | 0 |<br>| 5 | 0 | 0 | 0 | 0 | 1 | 0 |<br>| 6 | 0 | 0 | 0 | 0 | 1 | 1 |</p>
 <p><strong>示例代码</strong></p>
 <pre><code>bool isMatch(string s, string p) {
 vector&lt;vector&lt;int&gt; &gt; res(s.size()+1, vector&lt;int&gt;(p.size()+1)); 
@@ -130,7 +130,7 @@ return res[s.size()][p.size()];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/25/leetcode-44-Wildcard-Matching-h/" data-id="cjsk3bxmf00004kidiyjiuyys" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/25/leetcode-44-Wildcard-Matching-h/" data-id="cjsk3h4mm0001d8id0k6k4xbq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -177,7 +177,7 @@ return res[s.size()][p.size()];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/24/hello-world/" data-id="cjsk3bxmq00034kid65fri860" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/24/hello-world/" data-id="cjsk3h4mg0000d8idgwgc9g69" class="article-share-link">Share</a>
       
       
     </footer>
