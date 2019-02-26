@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="题目链接DescriptionGiven an array of non-negative integers, you are initially positioned at the first index of the array.Each element in the array represents your maximum jump length at that position.Your">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-26T02:08:06.246Z">
+<meta property="og:updated_time" content="2019-02-26T02:09:46.241Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leetcode-45.Jump Game II">
 <meta name="twitter:description" content="题目链接DescriptionGiven an array of non-negative integers, you are initially positioned at the first index of the array.Each element in the array represents your maximum jump length at that position.Your">
@@ -89,6 +89,7 @@
       
         <p><a href="https://leetcode.com/problems/jump-game-ii/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given an array of non-negative integers, you are initially positioned at the first index of the array.<br>Each element in the array represents your maximum jump length at that position.<br>Your goal is to reach the last index in the minimum number of jumps.</p>
 <p>Example:<br>Input: [2,3,1,1,4]<br>Output: 2<br>Explanation: The minimum number of jumps to reach the last index is 2.<br>    Jump 1 step from index 0 to 1, then 3 steps to the last index.</p>
+<a id="more"></a>
 <p><strong>解题思路</strong><br>利用动态规划思想，使用一个数组res[i]记录从i点到终点的最短步数，从后往前遍历数组，res[i]=min(1+res[(1-&gt;nums[i])+i]),最终结果为res[0]。</p>
 <p><strong>示例代码</strong></p>
 <pre><code>int jump(vector&lt;int&gt;&amp; nums) {
@@ -115,7 +116,7 @@ return res[0];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjsl4tc6b0002ngidksl6eu1q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjsl4va95000258ido3b8nkkw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>

@@ -86,33 +86,15 @@
       
         <p><a href="https://leetcode.com/problems/jump-game-ii/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given an array of non-negative integers, you are initially positioned at the first index of the array.<br>Each element in the array represents your maximum jump length at that position.<br>Your goal is to reach the last index in the minimum number of jumps.</p>
 <p>Example:<br>Input: [2,3,1,1,4]<br>Output: 2<br>Explanation: The minimum number of jumps to reach the last index is 2.<br>    Jump 1 step from index 0 to 1, then 3 steps to the last index.</p>
-<p><strong>解题思路</strong><br>利用动态规划思想，使用一个数组res[i]记录从i点到终点的最短步数，从后往前遍历数组，res[i]=min(1+res[(1-&gt;nums[i])+i]),最终结果为res[0]。</p>
-<p><strong>示例代码</strong></p>
-<pre><code>int jump(vector&lt;int&gt;&amp; nums) {
-if (nums.size() &lt;= 1)
-    return 0;
-vector&lt;int&gt; res(nums.size(), 0);
-for (int i = nums.size() - 2; i &gt;= 0; i--)
-{
-    int minx = 10000;
-    if (nums.size() - 1 - i &lt;= nums[i])
-        res[i] = 1;
-    else
-    {
-        for (int j = nums[i]; j &gt;= 1; j--)
-        {
-            minx = min(minx, 1 + res[i + j]);
-        }
-        res[i] = minx;
-    }
-}
-return res[0];
-}
-</code></pre>
+        
+          <p class="article-more-link">
+            <a href="/2019/02/26/leetcode-45-Jump-Game-II/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjsl4tc6b0002ngidksl6eu1q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjsl4va95000258ido3b8nkkw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -149,8 +131,6 @@ return res[0];
         <p><a href="https://leetcode.com/problems/wildcard-matching/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for ‘?’ and ‘*’.</p>
 <p>‘?’ Matches any single character.<br>‘*’ Matches any sequence of characters (including the empty sequence).<br>The matching should cover the entire input string (not partial).</p>
 <p>Note:<br>s could be empty and contains only lowercase letters a-z.<br>p could be empty and contains only lowercase letters a-z, and characters like ? or *.</p>
-<p>Example 1:<br>Input:<br>s = “aa”<br>p = “a”<br>Output: false<br>Explanation: “a” does not match the entire string “aa”.</p>
-<p><strong>解题思路</strong><br>    一道简化版的字符串匹配问题，采用动态规划的思路。s.size()=n,p.size()=m,使用一个二维数组res[n][m]，记录s的前i个字符是否与p的前j个字符相匹配。循环遍历p中字符，若p[j]为字母且与s[i]相同或p[j]为”?”，则res[i][j]=res[i-1][j-1]。若p[j]为”*”，则若有p[i][j-1]=1,则所有k&gt;i，p[k][j-1]=1。</p>
         
           <p class="article-more-link">
             <a href="/2019/02/25/leetcode-44-Wildcard-Matching-h/#more">Read More</a>
@@ -159,7 +139,7 @@ return res[0];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/25/leetcode-44-Wildcard-Matching-h/" data-id="cjsl4tc690001ngids9aei0l0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/25/leetcode-44-Wildcard-Matching-h/" data-id="cjsl4va93000158idjgav7w1r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -206,7 +186,7 @@ return res[0];
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/24/hello-world/" data-id="cjsl4tc640000ngidpxl0nrck" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/24/hello-world/" data-id="cjsl4va8y000058idwi43tq2f" class="article-share-link">Share</a>
       
       
     </footer>
