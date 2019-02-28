@@ -5,15 +5,20 @@
   
 
   
-  <title>Archives: 2019 | Hexo</title>
+  <title>leetcode-46.Permutations-m | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2019/index.html">
+  <meta name="description" content="题目链接DescriptionGiven a collection of distinct integers, return all possible permutations. Example: Input: [1,2,3]Output:[  [1,2,3],  [1,3,2],  [2,1,3],  [2,3,1],  [3,1,2],  [3,2,1]]">
+<meta name="keywords" content="leetcode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode-46.Permutations-m">
+<meta property="og:url" content="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="题目链接DescriptionGiven a collection of distinct integers, return all possible permutations. Example: Input: [1,2,3]Output:[  [1,2,3],  [1,3,2],  [2,1,3],  [2,3,1],  [3,1,2],  [3,2,1]]">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-02-28T01:25:52.454Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="leetcode-46.Permutations-m">
+<meta name="twitter:description" content="题目链接DescriptionGiven a collection of distinct integers, return all possible permutations. Example: Input: [1,2,3]Output:[  [1,2,3],  [1,3,2],  [2,1,3],  [2,3,1],  [3,1,2],  [3,2,1]]">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,97 +65,87 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/28/leetcode-46-Permutations-m/" class="archive-article-date">
-  <time datetime="2019-02-28T01:24:22.000Z" itemprop="datePublished">Feb 28</time>
+        <section id="main"><article id="post-leetcode-46-Permutations-m" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/28/leetcode-46-Permutations-m/" class="article-date">
+  <time datetime="2019-02-28T01:24:22.000Z" itemprop="datePublished">2019-02-28</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/28/leetcode-46-Permutations-m/">leetcode-46.Permutations-m</a>
+    <h1 class="article-title" itemprop="name">
+      leetcode-46.Permutations-m
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/26/leetcode-45-Jump-Game-II/" class="archive-article-date">
-  <time datetime="2019-02-26T02:07:20.000Z" itemprop="datePublished">Feb 26</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/26/leetcode-45-Jump-Game-II/">leetcode-45.Jump Game II</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/25/leetcode-44-Wildcard-Matching-h/" class="archive-article-date">
-  <time datetime="2019-02-25T08:37:26.000Z" itemprop="datePublished">Feb 25</time>
-</a>
+        <p><a href="https://leetcode.com/problems/permutations/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given a collection of distinct integers, return all possible permutations.</p>
+<p>Example:</p>
+<p>Input: [1,2,3]<br>Output:<br>[<br>  [1,2,3],<br>  [1,3,2],<br>  [2,1,3],<br>  [2,3,1],<br>  [3,1,2],<br>  [3,2,1]<br>]<br><a id="more"></a></p>
+<p><strong>解题思路</strong><br>求全排列的问题，考虑递归的思想。将数组中的每一个数拿出来作为第一个数，将余下的n-1个数进行全排列，依次递归得到的所有排列即为全部数据的全排列。</p>
+<p><strong>示例代码</strong></p>
+<pre><code>void permutestep(vector&lt;vector&lt;int&gt;&gt;&amp; res, vector&lt;int&gt; permu, int index)
+{
+if (permu.size() == index)
+{
+    res.push_back(permu);
+}
+else
+{
+    for (int i = 0; i &lt; permu.size() - index; i++)
+    {
+        swap(permu[index], permu[index + i]);
+        permutestep(res, permu, index+1);
+        swap(permu[index], permu[index + i]);
+    }
+    }
+}
+vector&lt;vector&lt;int&gt;&gt; permute(vector&lt;int&gt;&amp; nums) {
+    vector&lt;vector&lt;int&gt;&gt; res;
+    permutestep(res, nums, 0);
+    for (int i = 0; i &lt; res.size(); i++)
+    {
+        for (int j = 0; j &lt; nums.size(); j++)
+        {
+            cout &lt;&lt; res[i][j];
+        }
+        cout &lt;&lt; endl;
+    }
+    return res;
+  }
+</code></pre>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/25/leetcode-44-Wildcard-Matching-h/">leetcode-44.Wildcard Matching-h</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/02/24/hello-world/" class="archive-article-date">
-  <time datetime="2019-02-24T11:17:53.796Z" itemprop="datePublished">Feb 24</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/" data-id="cjsny6p6400003cidwnhq830k" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/24/hello-world/">Hello World</a>
-    </h1>
-  
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
+  
+    
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2019/02/26/leetcode-45-Jump-Game-II/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-45.Jump Game II</div>
+    </a>
   
+</nav>
 
+  
+</article>
 
 </section>
         
