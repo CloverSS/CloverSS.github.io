@@ -5,20 +5,20 @@
   
 
   
-  <title>leetcode-44.Wildcard Matching-h | Hexo</title>
+  <title>leetcode-47.Permutations II-m | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="题目链接DescriptionGiven an input string (s) and a pattern (p), implement wildcard pattern matching with support for ‘?’ and ‘*’. ‘?’ Matches any single character.‘*’ Matches any sequence of characters (i">
+  <meta name="description" content="题目链接DescriptionGiven a collection of numbers that might contain duplicates, return all possible unique permutations. Example: Input: [1,1,2]Output:[  [1,1,2],  [1,2,1],  [2,1,1]]">
 <meta name="keywords" content="leetcode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="leetcode-44.Wildcard Matching-h">
-<meta property="og:url" content="http://yoursite.com/2019/02/25/leetcode-44-Wildcard-Matching-h/index.html">
+<meta property="og:title" content="leetcode-47.Permutations II-m">
+<meta property="og:url" content="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="题目链接DescriptionGiven an input string (s) and a pattern (p), implement wildcard pattern matching with support for ‘?’ and ‘*’. ‘?’ Matches any single character.‘*’ Matches any sequence of characters (i">
+<meta property="og:description" content="题目链接DescriptionGiven a collection of numbers that might contain duplicates, return all possible unique permutations. Example: Input: [1,1,2]Output:[  [1,1,2],  [1,2,1],  [2,1,1]]">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-26T02:09:20.418Z">
+<meta property="og:updated_time" content="2019-02-28T11:28:46.698Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="leetcode-44.Wildcard Matching-h">
-<meta name="twitter:description" content="题目链接DescriptionGiven an input string (s) and a pattern (p), implement wildcard pattern matching with support for ‘?’ and ‘*’. ‘?’ Matches any single character.‘*’ Matches any sequence of characters (i">
+<meta name="twitter:title" content="leetcode-47.Permutations II-m">
+<meta name="twitter:description" content="题目链接DescriptionGiven a collection of numbers that might contain duplicates, return all possible unique permutations. Example: Input: [1,1,2]Output:[  [1,1,2],  [1,2,1],  [2,1,1]]">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -65,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-leetcode-44-Wildcard-Matching-h" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-leetcode-47-Permutations-II-m" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/02/25/leetcode-44-Wildcard-Matching-h/" class="article-date">
-  <time datetime="2019-02-25T08:37:26.000Z" itemprop="datePublished">2019-02-25</time>
+    <a href="/2019/02/28/leetcode-47-Permutations-II-m/" class="article-date">
+  <time datetime="2019-02-28T11:28:16.000Z" itemprop="datePublished">2019-02-28</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      leetcode-44.Wildcard Matching-h
+      leetcode-47.Permutations II-m
     </h1>
   
 
@@ -87,54 +87,53 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="https://leetcode.com/problems/wildcard-matching/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for ‘?’ and ‘*’.</p>
-<p>‘?’ Matches any single character.<br>‘*’ Matches any sequence of characters (including the empty sequence).<br>The matching should cover the entire input string (not partial).</p>
-<p>Note:<br>s could be empty and contains only lowercase letters a-z.<br>p could be empty and contains only lowercase letters a-z, and characters like ? or *.</p>
-<a id="more"></a>
-<p>Example 1:<br>Input:<br>s = “aa”<br>p = “a”<br>Output: false<br>Explanation: “a” does not match the entire string “aa”.</p>
-<p><strong>解题思路</strong><br>    一道简化版的字符串匹配问题，采用动态规划的思路。s.size()=n,p.size()=m,使用一个二维数组res[n][m]，记录s的前i个字符是否与p的前j个字符相匹配。循环遍历p中字符，若p[j]为字母且与s[i]相同或p[j]为”?”，则res[i][j]=res[i-1][j-1]。若p[j]为”*”，则若有p[i][j-1]=1,则所有k&gt;i，p[k][j-1]=1。</p>
-<p>举例：<strong>s:abadef   p:ab?*f</strong><br> s\p  | 0 | 1 | 2 | 3 | 4 | 5<br> —  |—|—|—|—|—|—<br> 0 | 1 | 0 | 0 | 0 | 0 | 0<br> 1 | 0 | 1 | 0 | 0 | 0 | 0<br> 2 | 0 | 0 | 1 | 0 | 0 | 0<br> 3 | 0 | 0 | 0 | 1 | 1 | 0<br> 4 | 0 | 0 | 0 | 0 | 1 | 0<br> 5 | 0 | 0 | 0 | 0 | 1 | 0<br> 6 | 0 | 0 | 0 | 0 | 1 | 1 </p>
+        <p><a href="https://leetcode.com/problems/permutations-ii/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given a collection of numbers that might contain duplicates, return all possible unique permutations.</p>
+<p>Example:</p>
+<p>Input: [1,1,2]<br>Output:<br>[<br>  [1,1,2],<br>  [1,2,1],<br>  [2,1,1]<br>]<br><a id="more"></a></p>
+<p><strong>解题思路</strong><br>与上一题求全排列的区别在于给出的数据有重复。对待无重复的全排列，给出的思路是：考虑递归的思想。将数组中的每一个数拿出来作为第一个数，将余下的n-1个数进行全排列，依次递归得到的所有排列即为全部数据的全排列。本题采用相同的思路，区别在于，每次进入递归函数时，先对数组进行排序，判断只将不同的数拿出来做为第一个数，对重复的数不再处理。</p>
 <p><strong>示例代码</strong></p>
-<pre><code>bool isMatch(string s, string p) {
-vector&lt;vector&lt;int&gt; &gt; res(s.size()+1, vector&lt;int&gt;(p.size()+1)); 
-for(int i=0;i&lt;s.size()+1;i++)
-    for(int j=0;j&lt;p.size()+1;j++)
-    {
-        res[i][j]=0;
-    }
-res[0][0] = 1;
-for (int j = 1; j &lt;= p.size(); j++)
+<pre><code>void permutestep(vector&lt;vector&lt;int&gt;&gt;&amp; res, vector&lt;int&gt; permu, int index)
 {
-    if (p[j - 1] != &apos;*&apos;)
+sort(permu.begin()+index, permu.end());
+if (permu.size() == index)
+{
+    res.push_back(permu);
+}
+else
+{
+    for (int i = 0; i &lt; permu.size() - index; i++)
     {
-        for (int i = 1; i &lt;= s.size(); i++)
+        if ((i &gt;= 1 &amp;&amp; permu[index + i] == permu[index + i - 1]))
+            continue;
+        else
         {
-            if (p[j - 1] == s[i - 1] || p[j - 1] == &apos;?&apos;)
-            {
-                res[i][j] = res[i-1][j - 1];
-            }
-        }
-    }
-    else if (p[j - 1] == &apos;*&apos;)
-    {
-        for (int i = 0; i &lt;=s.size(); i++)
-        {
-            if (res[i][j - 1] == 1)
-            {
-                for (; i &lt;= s.size(); i++)
-                    res[i][j] = 1;
-                break;
-            }
+            swap(permu[index], permu[index + i]);
+            permutestep(res, permu, index + 1);
+            swap(permu[index], permu[index + i]);
         }
     }
 }
-return res[s.size()][p.size()];
+}
+
+vector&lt;vector&lt;int&gt;&gt; permuteUnique(vector&lt;int&gt;&amp; nums) {
+sort(nums.begin(), nums.end());
+vector&lt;vector&lt;int&gt;&gt; res;
+permutestep(res, nums, 0);
+for (int i = 0; i &lt; res.size(); i++)
+{
+    for (int j = 0; j &lt; nums.size(); j++)
+    {
+        cout &lt;&lt; res[i][j];
+    }
+    cout &lt;&lt; endl;
+}
+return res;
 }
 </code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/25/leetcode-44-Wildcard-Matching-h/" data-id="cjsojq3ly0000isidabkmq220" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjsojq3mk0004isidi7iirt65" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -145,19 +144,10 @@ return res[s.size()][p.size()];
     
 <nav id="article-nav">
   
-    <a href="/2019/02/26/leetcode-45-Jump-Game-II/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          leetcode-45.Jump Game II
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/02/24/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/02/28/leetcode-46-Permutations-m/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
+      <div class="article-nav-title">leetcode-46.Permutations-m</div>
     </a>
   
 </nav>
