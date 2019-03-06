@@ -5,20 +5,20 @@
   
 
   
-  <title>leetcode-50.Pow(x, n)-m | Hexo</title>
+  <title>leetcode-54.Spiral Matrix-m | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="题目链接DescriptionImplement pow(x, n), which calculates x raised to the power n (xn). Example 1: Input: 2.00000, 10Output: 1024.00000Example 2:">
+  <meta name="description" content="题目链接DescriptionGiven a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order. Example 1: Input:[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ]]Output: [1,2,3,6,9,8,7,">
 <meta name="keywords" content="leetcode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="leetcode-50.Pow(x, n)-m">
-<meta property="og:url" content="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/index.html">
+<meta property="og:title" content="leetcode-54.Spiral Matrix-m">
+<meta property="og:url" content="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="题目链接DescriptionImplement pow(x, n), which calculates x raised to the power n (xn). Example 1: Input: 2.00000, 10Output: 1024.00000Example 2:">
+<meta property="og:description" content="题目链接DescriptionGiven a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order. Example 1: Input:[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ]]Output: [1,2,3,6,9,8,7,">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-03T08:08:09.220Z">
+<meta property="og:updated_time" content="2019-03-06T13:55:18.813Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="leetcode-50.Pow(x, n)-m">
-<meta name="twitter:description" content="题目链接DescriptionImplement pow(x, n), which calculates x raised to the power n (xn). Example 1: Input: 2.00000, 10Output: 1024.00000Example 2:">
+<meta name="twitter:title" content="leetcode-54.Spiral Matrix-m">
+<meta name="twitter:description" content="题目链接DescriptionGiven a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order. Example 1: Input:[ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8, 9 ]]Output: [1,2,3,6,9,8,7,">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -65,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-leetcode-50-Pow-x-n-m" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-leetcode-54-Spiral-Matrix-m" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/03/03/leetcode-50-Pow-x-n-m/" class="article-date">
-  <time datetime="2019-03-03T08:07:40.000Z" itemprop="datePublished">2019-03-03</time>
+    <a href="/2019/03/06/leetcode-54-Spiral-Matrix-m/" class="article-date">
+  <time datetime="2019-03-06T13:54:26.000Z" itemprop="datePublished">2019-03-06</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      leetcode-50.Pow(x, n)-m
+      leetcode-54.Spiral Matrix-m
     </h1>
   
 
@@ -87,42 +87,59 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="https://leetcode.com/problems/powx-n/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Implement pow(x, n), which calculates x raised to the power n (xn).</p>
+        <p><a href="https://leetcode.com/problems/spiral-matrix/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.</p>
 <p>Example 1:</p>
-<p>Input: 2.00000, 10<br>Output: 1024.00000<br>Example 2:</p>
+<p>Input:<br>[<br> [ 1, 2, 3 ],<br> [ 4, 5, 6 ],<br> [ 7, 8, 9 ]<br>]<br>Output: [1,2,3,6,9,8,7,4,5]</p>
 <a id="more"></a>
-<p>Input: 2.10000, 3<br>Output: 9.26100<br>Example 3:</p>
-<p>Input: 2.00000, -2<br>Output: 0.25000<br>Explanation: 2-2 = 1/22 = 1/4 = 0.25</p>
-<p><strong>解题思路</strong><br>求幂运算，利用二分法降低复杂度。对奇数幂=偶数幂*x，对负数幂=1.0/正数幂。对偶数幂，递推进行平方运算。</p>
+<p><strong>解题思路</strong><br>只想到了比较直接的方法，一层层遍历。没层对四条边分别做处理。需要讨论矩阵行和列的大小。</p>
 <p><strong>示例代码</strong></p>
-<pre><code>double myPowx(double x, int n)
-{
-    double res = 1;
-    if (n == 0)
-        return 1;
-    if (n % 2 == 0)
+<pre><code>vector&lt;int&gt; spiralOrder(vector&lt;vector&lt;int&gt;&gt;&amp; matrix) {
+    vector&lt;int&gt; nums;
+    int n = matrix.size()-1;
+    int m = matrix[0].size()-1;
+    int index = 0;
+    int cn = min(matrix.size()/2, matrix[0].size() / 2 );
+    for (int i = 0; i &lt; cn; i++)
     {
-        double tmp = myPowx(x, n / 2);
-        res = tmp * tmp;
+        for (int k = index; k &lt;= m - index; k++)
+            nums.push_back(matrix[i][k]);
+        for (int k = index+1; k &lt;= n - index; k++)
+            nums.push_back(matrix[k][m - i]);
+        for (int k = m - index-1; k &gt;= index; k--)
+            nums.push_back(matrix[n - i][k]);
+        for (int k = n - index-1; k &gt;= index + 1; k--)
+            nums.push_back(matrix[k][i]);
+        index++;
+    }
+    if (matrix.size() &lt; matrix[0].size())
+    {
+        if (matrix.size() % 2 == 1)
+        {
+            int i = cn;
+            for (int k = index; k &lt;= m - index; k++)
+                nums.push_back(matrix[i][k]);
+        }
     }
     else
     {
-        double tmp = myPowx(x, n / 2);
-        res = tmp * tmp*x;
+        if (matrix[0].size() % 2 == 1)
+        {
+            int i = cn;
+            for (int k = index; k &lt;= n - index; k++)
+                nums.push_back(matrix[k][i]);
+
+        }
     }
-    return res;
-}
-double myPow(double x, int n) {
-    if (n &gt;= 0)
-        return myPowx(x, n);
-    else
-        return 1.0 / myPowx(x, n);
+
+    for (int i = 0; i &lt; nums.size(); i++)
+        cout &lt;&lt; nums[i] &lt;&lt; &quot; &quot;;
+    return nums;
 }
 </code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjsx9lldh000cr8id9v4fg25m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjsx9lldf000ar8id7sww5h3n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -133,19 +150,10 @@ double myPow(double x, int n) {
     
 <nav id="article-nav">
   
-    <a href="/2019/03/05/leetcode-51-52-N-Queens-h/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          leetcode-51/52.N-Queens-h
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/03/03/leetcode-49-Group-Anagrams-m/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/03/06/leetcode-53-Maximum-Subarray-e/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">leetcode-49.Group Anagrams-m</div>
+      <div class="article-nav-title">leetcode-53. Maximum Subarray-e</div>
     </a>
   
 </nav>
