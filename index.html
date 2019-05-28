@@ -96,31 +96,15 @@
 <li><p>会话（Session）<br> ZooKeeper中，一个客户端连接是指客户端和服务器之间的一个TCP长连接。客户端在启动时与服务器建立连接，与服务器保持有效的会话。会话通过保持一个sessionTimeout值来设置一个客户端会话的超时时间。当客户端连接断开时，只要在sessionTimeout规定的时间内能够重新连接上集群中任意一台服务器，那么之前创建的会话仍然有效。</p>
 </li>
 <li><p>数据节点（Znode）<br> 数据模型中的数据单元被称之为数据节点–ZNode。ZooKeeper将所有数据存储在内存中，数据模型是一棵树（ZNode Tree）。在ZooKeeper中，ZNode可以分为持久节点和临时节点两类。</p>
-<h2 id="3、ZooKeeper的ZAB协议"><a href="#3、ZooKeeper的ZAB协议" class="headerlink" title="3、ZooKeeper的ZAB协议"></a>3、ZooKeeper的ZAB协议</h2><p>ZooKeeper使用了一种称为ZooKeeper Atomic Broadcast（ZAB）的协议作为其核心算法。ZAB是专门为ZooKeeper设计的一种支持崩溃恢复的原子广播协议。基于该协议，ZooKeeper实现了一种主备模式的系统架构来保持集群中各副本之间的数据一致性。使用一个单一的主进程来接受并处理客户端的事务请求，将状态变更以事务Proposal的形式广播到所有的副本进程。为了实现顺序执行，ZAB协议必须能够保证一个全局的变更序列被顺序应用。<br>ZAB协议的核心是定义了对于那些会改变ZooKeeper服务器数据状态的事务请求的处理方式：<br><em>所有事务请求由全局唯一的Leader服务器来协调处理，余下服务器成为Follower服务器。Leader服务器将客户端事务请求转换成一个事务proposal，并将该proposal分发给集群中所有的Follower服务器。之后Leader服务器等待所有Follower服务器的反馈，一旦超过半数Follower服务器进行了正确的反馈。Leader会再次向所有的Follower分发Commit消息，要求将前一个Proposal提交。</em></p>
-</li>
-</ul>
-<p><strong>3.1、ZAB基本思想</strong><br>ZAB协议包括两种基本的模式，崩溃恢复和消息广播模式。当服务框架在启动过程中，或者当Leader服务器出现网络中断、崩溃退出与重启等异常情况时。ZAB协议会进入<strong>恢复模式</strong>并选举新的Leader服务器。当新的Leader产生，同时集群中已经有过半的机器与该Leader服务器完成了状态同步之后，ZAB协议就会退出恢复模式。进入<strong>消息广播模式</strong>，ZooKeeper只允许唯一的一个Leader服务器进行事务请求的处理，如果集群中其他机器接收到客户端的事务请求，非Leader服务器会首先将事务请求转发给Leader服务器，Leader接受到事务请求后，会生成对应的事务提案并发起一轮广播协议。</p>
-<ul>
-<li><p>消息广播<br>ZAB协议使用一个类似二阶段提交过程的原子广播协议。消息广播协议使用TCP进行网络通信。在整个消息广播过程中，Leader服务器会为每个事务请求生成对应的proposal来进行广播，在广播之前，会为事务proposal分配一个全局单调递增的唯一ID，称之为事务ID（ZID），将Proposal按照ZXID的先后顺序进行排序和处理以保证消息的顺序处理。</p>
-</li>
-<li><p>崩溃恢复<br>ZAB协议需要一个高效且可靠的Leader选举算法，从而确保能够快速地选举出新的Leader。同时，Leader选举算法不仅仅需要让Leader自己知道其自身已被选举为Leader，同时还需要让集群中所有其他机器也能够快速地感知到选举产生的新的Leader服务器。</p>
-</li>
-<li><p>基本特性<br>为了保证数据一致性，ZAB协议需要考虑可能出现的隐患，有两个典型的情况：<br><strong>ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</strong><br>假设一个事务在Leader服务器上已经提交且得到了过半的ACK反馈，但在Commit消息发送前，Leader服务器故障。<br><strong>ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</strong><br>如果Leader服务器在提出了一个事务Proposal之后就崩溃退出了，从而导致集群中的其他服务器都没有收到这个事务proposal。当初始Leader恢复重新加入集群中时，需要确保丢弃该proposal。<br>针对这种情况。在ZAB协议的事务编号ZXID设计中，ZXID是一个64位的数字，其中低32位可以看做是一个简单的单调递增的计数器，Leader服务器在产生一个新的事务Proposal的时候，会对该计数器进行加1操作；而高32位代表了Leader周期epoch的编号，每当选举产生一个新的Leader服务器，就会从Leader服务器中取出本地日志中最大事务Propopsal的ZXID，并从中解析出对应的epoch值，然后对其进行加1操作，之后以此编号作为新的epoch，并将低32位置0开始生成新的ZXID。这一策略能够避免不同的Leader服务器错误地使用相同的ZXID编号提出不同proposal的情况。基于此，当一个包含了上一个Leader周期中尚未提交过得事务proposal的服务器启动并重新加入集群时，肯定无法成为Leader，因为新集群中肯定包含了更高epoch的机器。<br>3.2、ZAB模型及算法</p>
-</li>
-<li><p>系统模型<br>在一个由一组进程Π={P1,P2,…,Pn}组成的分布式系统中，每一个进程都有各自的存储设备，各进程之间通过相互通信来实现消息的传递。如果一个进程正常工作，我们称之为UP状态；如果一个进程崩溃了，那么我们称之为DOWN状态。当集群中存在过半的进程处于UP状态时，就可以进行正常的消息广播了。我们将UP状态的进程子集称为Quorum（Q）。<br>我们用Pi和Pi来分别表示进程组Π中的两个不同的进程，Cij来表示进程Pi和Pj之间的网络通信通道，满足两个基本特性：<br><strong>完整性：</strong><br>进程Pj如果收到来自进程Pi的消息m，那么进程Pi一定确实发送了消息m。<br><strong>前置性：</strong><br>如果进程Pj收到了消息m，m’是m的前置消息，那么Pj一定先接受了m’。</p>
-</li>
-<li><p>问题描述<br>ZooKeeper必须具备高吞吐和低延迟的特性，并且能够很好地在高并发情况下完成分布式数据的一致性处理，同时能够优雅地处理运行时故障，并具备快速地从故障中恢复过来的能力。<br>ZAB协议规定任何时候都需要保证只有一个主进程进行消息广播，如果主进程崩了需要选举出新的主进程。随着时间的推移会出现一个主进程序列:P1,P2,…,Pe-1,Pe。如果e&lt;e’，我们说Pe是Pe’之前的主进程，表示为Pe＜Pe’。<br><strong>主进程周期：</strong><br>为了确保在充分完成崩溃恢复阶段后，才开始生成新的事务消息广播。实现ready(e)函数，告知进程能否进行事务消息的广播。调用ready(e)函数后，ZAB设置实例值来标识当前主进程的周期并用该实例值设置事务标识中的epoch字段。<br><strong>事务：</strong><br>假设各个进程都存在类似于transactions(v,z)的函数调用，来实现状态变更的广播。其中v为事务内容，z为事务标识，z=&lt;e,c&gt;也包含两个组成部分，主进程周期e和当前主进程周期内的事务计数c。针对每一个新事务，主进程会首先将事务计数c递增。</p>
-</li>
-<li><p>算法描述<br>整个ZAB协议主要包括消息广播和崩溃恢复两个过程，进一步分为三个阶段，分别是发现(Discovery)、同步(Synchronization)和广播(Broadcast)阶段。<br><center><strong>术语介绍</strong></center><br>| 术语名 | 说明 |<br>| :——: | :——: |<br>| Fp | Follower f处理过的最后一个事务Proposal |<br>| Fzxid | Follower f处理过的历史事务Proposal中最后一个事务Proposal的事务标识ZXID |<br>| hf | Follower f已经处理过的事务序列 |<br>| Ie | 初始化历史记录，新Leader的hf |<br><strong>阶段一: 发现</strong><br>阶段一主要就是Leader选举过程，准Leader L和Foolower F的工作流程分别为：<br><strong>步骤F.1.1</strong> F将自己最后接受的事务Proposal的epoch值CEPOCH(Fp)发送给L<br><strong>步骤L.1.1</strong> 当接收到来自过半的Follower的CEPOCH(Fp)消息后，L生成NEWEPOCH(e’)消息给这些过半的Follower。e’为所有接受到的消息中最大的epoch+1。<br><strong>步骤F.1.2</strong> 当Follower收到NEWEPOCH(e’)消息后，如果检测到当前的CEPOCH(Fp)小于e’，那么会将其赋值为e’，并向L反馈Ack消息。反馈消息中包含该Follower的epoch及历史Proposal集合：hr<br>当Leader接收到过半ACK后，L就会从其中选取出一个F,并使用其hr作为初始化事务集合Ie’。被选中的F需要满足，F的epoch最大，在epoch相同的情况下，zxid最大。</p>
-</li>
-</ul>
-<p><strong>阶段二：同步</strong><br>完成发现流程后，进入同步阶段，此阶段L和F的工作流程分别如下：<br><strong>步骤L.2.1</strong> L会将e’和Ie’发送给所有Follower<br><strong>步骤F.2.1</strong> 当Follower接受到来自L的消息后，如果发现CEPOCH(Fp)≠e’,那么直接进入下一轮循环，因为此时F还处在上一轮或者更上轮，无法参与本轮的同步。如果CEPOCH(Fp)=e’，那么Follower执行事务应用操作。对每个事务Proposal：&lt;v,z&gt;∈Ie’,F接受&lt;e’,&lt;v,z&gt;&gt;。最后反馈给Lb表示已经接受并处理了所<br>有Ie’中的事务Proposal。<br><strong>步骤L.2.2</strong> 当L接收到来自过半F的反馈信息后，想所有的Follower发送Commit消息<br><strong>步骤F.2.2</strong> 当F收到Commit消息后，依次处理并提交所有Ie’’中未处理的事务。</p>
-<p><strong>阶段三：广播</strong><br>完成同步阶段后，ZAB协议就可以正式开始接收客户端新的事务请求，并进行广播流程。<br><strong>步骤L.3.1</strong> L接收到新的事务请求后，会生成对应的事务Proposal，并根据ZXID的顺序向所有的F发送&lt;e’,&lt;v,z&gt;&gt;，其中epoch(z)=e’。<br><strong>步骤F.3.1</strong> F根据接收消息的先后次序处理Proposal,并将他们追加到hf中，再反馈给Leader。<br><strong>步骤L.3.1</strong> 当L接收到来自过半的F针对事务&lt;e’,&lt;v,z&gt;&gt;的ACK后，发送Commit&lt;e’,&lt;v,z&gt;&gt;给所有的F。<br><strong>步骤F.3.2</strong> 当F接收到来自L的Commit&lt;e’,&lt;v,z&gt;&gt;后，提交事务&lt;v,z&gt;。</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2019/05/27/zookeeper浅析/#more">Read More</a>
+          </p>
+        
       
-    </div>
+    </li></ul></div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjw6fj8mz000lk4idu7xlsei1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjw76wuys000n7cid6vxo7ida" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
@@ -165,7 +149,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjw6fj8np000ok4idlg3xccwb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjw76wuyl000i7cidqlr0wjbm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -210,7 +194,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjw6fj8mq000gk4id60epwxgc" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjw76wuyi000g7cidn8k33llw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -255,7 +239,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjw6fj8mo000ek4idevwicjpq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjw76wuyg000c7cidxwbck68w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -300,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjw6fj8mu000ik4idplckvw75" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjw76wuyh000e7cidd9pesc0o" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -345,7 +329,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjw6fj8mf0008k4idpg51ccmz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjw76wuyd00087cidntjvazax" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -391,7 +375,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjw6fj8me0007k4idvo0jnfnm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjw76wuye000a7cidbgz4fpxm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -436,7 +420,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjw6fj8mj000ck4idncsk2ljp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjw76wuy500017cidxdh77qy3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -481,7 +465,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/" data-id="cjw6fj8mh000ak4idxkvv6ue2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/" data-id="cjw76wuya00047cid0ef2odbd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -525,7 +509,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjw6fj8lw0002k4idxltmkzlh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjw76wuyb00057cidrxr37y0v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
