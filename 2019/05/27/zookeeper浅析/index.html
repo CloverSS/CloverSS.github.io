@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="1、zookeeper是什么zookeeper是一个典型的分布式数据一致性解决方案。zookeeper致力于提供一个高性能、高可用、具有严格的顺序访问控制能力（主要是写操作的严格顺序性）的分布式协调服务。其设计目标是将那些复杂且容易出错的分布式一致性服务封装起来，构成一个高效可靠的原语集，并以一系列简单易用的借口提供给用户使用。zookeeper四个设计目标：  简单的数据模型 可以构建集群 顺序">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-28T02:36:34.872Z">
+<meta property="og:updated_time" content="2019-05-28T02:39:00.768Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="zookeeper浅析">
 <meta name="twitter:description" content="1、zookeeper是什么zookeeper是一个典型的分布式数据一致性解决方案。zookeeper致力于提供一个高性能、高可用、具有严格的顺序访问控制能力（主要是写操作的严格顺序性）的分布式协调服务。其设计目标是将那些复杂且容易出错的分布式一致性服务封装起来，构成一个高效可靠的原语集，并以一系列简单易用的借口提供给用户使用。zookeeper四个设计目标：  简单的数据模型 可以构建集群 顺序">
@@ -92,25 +92,29 @@
 <li>简单的数据模型</li>
 <li>可以构建集群</li>
 <li>顺序访问</li>
-<li><p>高性能</p>
-<h2 id="2、zookeeper中几个基本概念"><a href="#2、zookeeper中几个基本概念" class="headerlink" title="2、zookeeper中几个基本概念"></a>2、zookeeper中几个基本概念</h2></li>
+<li>高性能</li>
+</ul>
+<h2 id="2、zookeeper中几个基本概念"><a href="#2、zookeeper中几个基本概念" class="headerlink" title="2、zookeeper中几个基本概念"></a>2、zookeeper中几个基本概念</h2><ul>
 <li><p>集群角色<br>zookeeper中没有使用传统的Master/Slave概念，而是引入了Leader、Follower和Observer三种角色。集群中的所有机器通过选举来确定”Leader”,Leader为客户端提供读写服务，Observer和Follower提供读服务，但Observer机器布参与Leader选举过程，也不参与写操作的”过半写成功”策略。</p>
 </li>
 <li><p>会话（Session）<br> ZooKeeper中，一个客户端连接是指客户端和服务器之间的一个TCP长连接。客户端在启动时与服务器建立连接，与服务器保持有效的会话。会话通过保持一个sessionTimeout值来设置一个客户端会话的超时时间。当客户端连接断开时，只要在sessionTimeout规定的时间内能够重新连接上集群中任意一台服务器，那么之前创建的会话仍然有效。</p>
 </li>
 <li><p>数据节点（Znode）<br> 数据模型中的数据单元被称之为数据节点–ZNode。ZooKeeper将所有数据存储在内存中，数据模型是一棵树（ZNode Tree）。在ZooKeeper中，ZNode可以分为持久节点和临时节点两类。</p>
-<a id="more"></a>
-<h2 id="3、ZooKeeper的ZAB协议"><a href="#3、ZooKeeper的ZAB协议" class="headerlink" title="3、ZooKeeper的ZAB协议"></a>3、ZooKeeper的ZAB协议</h2><p>ZooKeeper使用了一种称为ZooKeeper Atomic Broadcast（ZAB）的协议作为其核心算法。ZAB是专门为ZooKeeper设计的一种支持崩溃恢复的原子广播协议。基于该协议，ZooKeeper实现了一种主备模式的系统架构来保持集群中各副本之间的数据一致性。使用一个单一的主进程来接受并处理客户端的事务请求，将状态变更以事务Proposal的形式广播到所有的副本进程。为了实现顺序执行，ZAB协议必须能够保证一个全局的变更序列被顺序应用。<br>ZAB协议的核心是定义了对于那些会改变ZooKeeper服务器数据状态的事务请求的处理方式：<br><em>所有事务请求由全局唯一的Leader服务器来协调处理，余下服务器成为Follower服务器。Leader服务器将客户端事务请求转换成一个事务proposal，并将该proposal分发给集群中所有的Follower服务器。之后Leader服务器等待所有Follower服务器的反馈，一旦超过半数Follower服务器进行了正确的反馈。Leader会再次向所有的Follower分发Commit消息，要求将前一个Proposal提交。</em></p>
 </li>
 </ul>
+<a id="more"></a>
+<h2 id="3、ZooKeeper的ZAB协议"><a href="#3、ZooKeeper的ZAB协议" class="headerlink" title="3、ZooKeeper的ZAB协议"></a>3、ZooKeeper的ZAB协议</h2><p>ZooKeeper使用了一种称为ZooKeeper Atomic Broadcast（ZAB）的协议作为其核心算法。ZAB是专门为ZooKeeper设计的一种支持崩溃恢复的原子广播协议。基于该协议，ZooKeeper实现了一种主备模式的系统架构来保持集群中各副本之间的数据一致性。使用一个单一的主进程来接受并处理客户端的事务请求，将状态变更以事务Proposal的形式广播到所有的副本进程。为了实现顺序执行，ZAB协议必须能够保证一个全局的变更序列被顺序应用。<br>ZAB协议的核心是定义了对于那些会改变ZooKeeper服务器数据状态的事务请求的处理方式：<br><em>所有事务请求由全局唯一的Leader服务器来协调处理，余下服务器成为Follower服务器。Leader服务器将客户端事务请求转换成一个事务proposal，并将该proposal分发给集群中所有的Follower服务器。之后Leader服务器等待所有Follower服务器的反馈，一旦超过半数Follower服务器进行了正确的反馈。Leader会再次向所有的Follower分发Commit消息，要求将前一个Proposal提交。</em></p>
 <p><strong>3.1、ZAB基本思想</strong><br>ZAB协议包括两种基本的模式，崩溃恢复和消息广播模式。当服务框架在启动过程中，或者当Leader服务器出现网络中断、崩溃退出与重启等异常情况时。ZAB协议会进入<strong>恢复模式</strong>并选举新的Leader服务器。当新的Leader产生，同时集群中已经有过半的机器与该Leader服务器完成了状态同步之后，ZAB协议就会退出恢复模式。进入<strong>消息广播模式</strong>，ZooKeeper只允许唯一的一个Leader服务器进行事务请求的处理，如果集群中其他机器接收到客户端的事务请求，非Leader服务器会首先将事务请求转发给Leader服务器，Leader接受到事务请求后，会生成对应的事务提案并发起一轮广播协议。</p>
 <ul>
 <li><p>消息广播<br>ZAB协议使用一个类似二阶段提交过程的原子广播协议。消息广播协议使用TCP进行网络通信。在整个消息广播过程中，Leader服务器会为每个事务请求生成对应的proposal来进行广播，在广播之前，会为事务proposal分配一个全局单调递增的唯一ID，称之为事务ID（ZID），将Proposal按照ZXID的先后顺序进行排序和处理以保证消息的顺序处理。</p>
 </li>
 <li><p>崩溃恢复<br>ZAB协议需要一个高效且可靠的Leader选举算法，从而确保能够快速地选举出新的Leader。同时，Leader选举算法不仅仅需要让Leader自己知道其自身已被选举为Leader，同时还需要让集群中所有其他机器也能够快速地感知到选举产生的新的Leader服务器。</p>
 </li>
-<li><p>基本特性<br>为了保证数据一致性，ZAB协议需要考虑可能出现的隐患，有两个典型的情况：<br><strong>ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</strong><br>假设一个事务在Leader服务器上已经提交且得到了过半的ACK反馈，但在Commit消息发送前，Leader服务器故障。<br><strong>ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</strong><br>如果Leader服务器在提出了一个事务Proposal之后就崩溃退出了，从而导致集群中的其他服务器都没有收到这个事务proposal。当初始Leader恢复重新加入集群中时，需要确保丢弃该proposal。<br>针对这种情况。在ZAB协议的事务编号ZXID设计中，ZXID是一个64位的数字，其中低32位可以看做是一个简单的单调递增的计数器，Leader服务器在产生一个新的事务Proposal的时候，会对该计数器进行加1操作；而高32位代表了Leader周期epoch的编号，每当选举产生一个新的Leader服务器，就会从Leader服务器中取出本地日志中最大事务Propopsal的ZXID，并从中解析出对应的epoch值，然后对其进行加1操作，之后以此编号作为新的epoch，并将低32位置0开始生成新的ZXID。这一策略能够避免不同的Leader服务器错误地使用相同的ZXID编号提出不同proposal的情况。基于此，当一个包含了上一个Leader周期中尚未提交过得事务proposal的服务器启动并重新加入集群时，肯定无法成为Leader，因为新集群中肯定包含了更高epoch的机器。<br>3.2、ZAB模型及算法</p>
+<li><p>基本特性<br>为了保证数据一致性，ZAB协议需要考虑可能出现的隐患，有两个典型的情况：<br><strong>ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交</strong><br>假设一个事务在Leader服务器上已经提交且得到了过半的ACK反馈，但在Commit消息发送前，Leader服务器故障。<br><strong>ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务</strong><br>如果Leader服务器在提出了一个事务Proposal之后就崩溃退出了，从而导致集群中的其他服务器都没有收到这个事务proposal。当初始Leader恢复重新加入集群中时，需要确保丢弃该proposal。<br>针对这种情况。在ZAB协议的事务编号ZXID设计中，ZXID是一个64位的数字，其中低32位可以看做是一个简单的单调递增的计数器，Leader服务器在产生一个新的事务Proposal的时候，会对该计数器进行加1操作；而高32位代表了Leader周期epoch的编号，每当选举产生一个新的Leader服务器，就会从Leader服务器中取出本地日志中最大事务Propopsal的ZXID，并从中解析出对应的epoch值，然后对其进行加1操作，之后以此编号作为新的epoch，并将低32位置0开始生成新的ZXID。这一策略能够避免不同的Leader服务器错误地使用相同的ZXID编号提出不同proposal的情况。基于此，当一个包含了上一个Leader周期中尚未提交过得事务proposal的服务器启动并重新加入集群时，肯定无法成为Leader，因为新集群中肯定包含了更高epoch的机器。</p>
 </li>
+</ul>
+<p><strong>3.2、ZAB模型及算法</strong></p>
+<ul>
 <li><p>系统模型<br>在一个由一组进程Π={P1,P2,…,Pn}组成的分布式系统中，每一个进程都有各自的存储设备，各进程之间通过相互通信来实现消息的传递。如果一个进程正常工作，我们称之为UP状态；如果一个进程崩溃了，那么我们称之为DOWN状态。当集群中存在过半的进程处于UP状态时，就可以进行正常的消息广播了。我们将UP状态的进程子集称为Quorum（Q）。<br>我们用Pi和Pi来分别表示进程组Π中的两个不同的进程，Cij来表示进程Pi和Pj之间的网络通信通道，满足两个基本特性：<br><strong>完整性：</strong><br>进程Pj如果收到来自进程Pi的消息m，那么进程Pi一定确实发送了消息m。<br><strong>前置性：</strong><br>如果进程Pj收到了消息m，m’是m的前置消息，那么Pj一定先接受了m’。</p>
 </li>
 <li><p>问题描述<br>ZooKeeper必须具备高吞吐和低延迟的特性，并且能够很好地在高并发情况下完成分布式数据的一致性处理，同时能够优雅地处理运行时故障，并具备快速地从故障中恢复过来的能力。<br>ZAB协议规定任何时候都需要保证只有一个主进程进行消息广播，如果主进程崩了需要选举出新的主进程。随着时间的推移会出现一个主进程序列:P1,P2,…,Pe-1,Pe。如果e&lt;e’，我们说Pe是Pe’之前的主进程，表示为Pe＜Pe’。<br><strong>主进程周期：</strong><br>为了确保在充分完成崩溃恢复阶段后，才开始生成新的事务消息广播。实现ready(e)函数，告知进程能否进行事务消息的广播。调用ready(e)函数后，ZAB设置实例值来标识当前主进程的周期并用该实例值设置事务标识中的epoch字段。<br><strong>事务：</strong><br>假设各个进程都存在类似于transactions(v,z)的函数调用，来实现状态变更的广播。其中v为事务内容，z为事务标识，z=&lt;e,c&gt;也包含两个组成部分，主进程周期e和当前主进程周期内的事务计数c。针对每一个新事务，主进程会首先将事务计数c递增。</p>
@@ -124,7 +128,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjw76wuys000n7cid6vxo7ida" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjw775qch000ofsidvrbfc7lr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>

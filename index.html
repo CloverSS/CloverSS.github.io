@@ -89,22 +89,25 @@
 <li>简单的数据模型</li>
 <li>可以构建集群</li>
 <li>顺序访问</li>
-<li><p>高性能</p>
-<h2 id="2、zookeeper中几个基本概念"><a href="#2、zookeeper中几个基本概念" class="headerlink" title="2、zookeeper中几个基本概念"></a>2、zookeeper中几个基本概念</h2></li>
+<li>高性能</li>
+</ul>
+<h2 id="2、zookeeper中几个基本概念"><a href="#2、zookeeper中几个基本概念" class="headerlink" title="2、zookeeper中几个基本概念"></a>2、zookeeper中几个基本概念</h2><ul>
 <li><p>集群角色<br>zookeeper中没有使用传统的Master/Slave概念，而是引入了Leader、Follower和Observer三种角色。集群中的所有机器通过选举来确定”Leader”,Leader为客户端提供读写服务，Observer和Follower提供读服务，但Observer机器布参与Leader选举过程，也不参与写操作的”过半写成功”策略。</p>
 </li>
 <li><p>会话（Session）<br> ZooKeeper中，一个客户端连接是指客户端和服务器之间的一个TCP长连接。客户端在启动时与服务器建立连接，与服务器保持有效的会话。会话通过保持一个sessionTimeout值来设置一个客户端会话的超时时间。当客户端连接断开时，只要在sessionTimeout规定的时间内能够重新连接上集群中任意一台服务器，那么之前创建的会话仍然有效。</p>
 </li>
 <li><p>数据节点（Znode）<br> 数据模型中的数据单元被称之为数据节点–ZNode。ZooKeeper将所有数据存储在内存中，数据模型是一棵树（ZNode Tree）。在ZooKeeper中，ZNode可以分为持久节点和临时节点两类。</p>
+</li>
+</ul>
         
           <p class="article-more-link">
             <a href="/2019/05/27/zookeeper浅析/#more">Read More</a>
           </p>
         
       
-    </li></ul></div>
+    </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjw76wuys000n7cid6vxo7ida" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjw775qch000ofsidvrbfc7lr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
@@ -149,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjw76wuyl000i7cidqlr0wjbm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjw775qc8000hfsidfhd0rceh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -194,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjw76wuyi000g7cidn8k33llw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjw775qc6000ffsid7klx1nbp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -239,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjw76wuyg000c7cidxwbck68w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjw775qc5000dfsid2i6ziwsw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -284,7 +287,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjw76wuyh000e7cidd9pesc0o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjw775qc3000afsid2we1l038" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -329,7 +332,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjw76wuyd00087cidntjvazax" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjw775qbz0005fsidivqp4jwf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -375,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjw76wuye000a7cidbgz4fpxm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjw775qc20008fsidzwcgy1jm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -420,7 +423,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjw76wuy500017cidxdh77qy3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjw775qbx0003fsidpwtfa0p5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -465,7 +468,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/" data-id="cjw76wuya00047cid0ef2odbd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/" data-id="cjw775qby0004fsid8h32csig" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -509,7 +512,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjw76wuyb00057cidrxr37y0v" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/26/leetcode-45-Jump-Game-II/" data-id="cjw775qbo0000fsidnc13wval" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
