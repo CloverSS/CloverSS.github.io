@@ -7,18 +7,18 @@
   
   <title>使用kubeadm搭建kubernetes集群 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="使用kubeadm搭建kubernetes集群使用kubernetes提供的kubeadm工具快速创建一个kubernetes集群 系统版本：CentOs7 docker版本：18.09.* kubernetes版本：v1.15.0 安装dockerMaster、node节点安装docker 安装相关依赖 install -y yum-utils device-mapper-persistent-">
+  <meta name="description" content="使用kubeadm搭建kubernetes集群使用kubernetes提供的kubeadm工具快速创建一个kubernetes集群 系统版本：CentOs7 docker版本：18.09.* kubernetes版本：v1.15.0 安装dockerMaster、node节点安装docker 安装相关依赖 1yum install -y yum-utils device-mapper-persis">
 <meta name="keywords" content="kubernetes">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用kubeadm搭建kubernetes集群">
 <meta property="og:url" content="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="使用kubeadm搭建kubernetes集群使用kubernetes提供的kubeadm工具快速创建一个kubernetes集群 系统版本：CentOs7 docker版本：18.09.* kubernetes版本：v1.15.0 安装dockerMaster、node节点安装docker 安装相关依赖 install -y yum-utils device-mapper-persistent-">
+<meta property="og:description" content="使用kubeadm搭建kubernetes集群使用kubernetes提供的kubeadm工具快速创建一个kubernetes集群 系统版本：CentOs7 docker版本：18.09.* kubernetes版本：v1.15.0 安装dockerMaster、node节点安装docker 安装相关依赖 1yum install -y yum-utils device-mapper-persis">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-04T03:10:03.305Z">
+<meta property="og:updated_time" content="2019-07-04T03:20:06.907Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用kubeadm搭建kubernetes集群">
-<meta name="twitter:description" content="使用kubeadm搭建kubernetes集群使用kubernetes提供的kubeadm工具快速创建一个kubernetes集群 系统版本：CentOs7 docker版本：18.09.* kubernetes版本：v1.15.0 安装dockerMaster、node节点安装docker 安装相关依赖 install -y yum-utils device-mapper-persistent-">
+<meta name="twitter:description" content="使用kubeadm搭建kubernetes集群使用kubernetes提供的kubeadm工具快速创建一个kubernetes集群 系统版本：CentOs7 docker版本：18.09.* kubernetes版本：v1.15.0 安装dockerMaster、node节点安装docker 安装相关依赖 1yum install -y yum-utils device-mapper-persis">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -93,15 +93,23 @@
 <p>kubernetes版本：v1.15.0</p>
 <h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><p>Master、node节点安装docker</p>
 <p>安装相关依赖</p>
-<figure class="highlight plain"><figcaption><span>install -y yum-utils device-mapper-persistent-data lvm2```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">添加官方yum库</span><br><span class="line"></span><br><span class="line">```yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></table></figure>
+<p>添加官方yum库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
 <p>安装docker</p>
-<figure class="highlight plain"><figcaption><span>install docker-ce```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">查看docker版本</span><br><span class="line"></span><br><span class="line">```docker version</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker-ce</span><br></pre></td></tr></table></figure>
+<p>查看docker版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></table></figure>
 <p>启动docker服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">service docker start</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">service docker start</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 <p>运行hello world测试docker是否安装成功</p>
-<figure class="highlight docker"><figcaption><span>run hello-world```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">若安装成功会有输出：</span><br></pre></td></tr></table></figure>
-<p>Unable to find image ‘hello-world:latest’ locally<br>latest: Pulling from library/hello-world<br>1b930d010525: Pull complete<br>Digest: sha256:41a65640635299bab090f783209c1e3a3f11934cf7756b09cb2f1e02147c6ed8<br>Status: Downloaded newer image for hello-world:latest</p>
-<p>Hello from Docker!<br>This message shows that your installation appears to be working correctly.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">docker安装成功</span><br><span class="line"></span><br><span class="line">## 系统设置</span><br><span class="line"></span><br><span class="line">关闭SeLinux</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">setenforce 0</span><br><span class="line">sed -i &apos;s/^SELINUX=enforcing$/SELINUX=permissive/&apos; /etc/selinux/config</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
+<p>若安装成功会有输出：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Unable to find image 'hello-world:latest' locally</span><br><span class="line">latest: Pulling from library/hello-world</span><br><span class="line">1b930d010525: Pull complete</span><br><span class="line">Digest: sha256:41a65640635299bab090f783209c1e3a3f11934cf7756b09cb2f1e02147c6ed8</span><br><span class="line">Status: Downloaded newer image for hello-world:latest</span><br><span class="line"></span><br><span class="line">Hello from Docker!</span><br><span class="line">This message shows that your installation appears to be working correctly.</span><br></pre></td></tr></table></figure>
+<p>docker安装成功</p>
+<h2 id="系统设置"><a href="#系统设置" class="headerlink" title="系统设置"></a>系统设置</h2><p>关闭SeLinux</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config</span><br></pre></td></tr></table></figure>
 <p>关闭swap，取消开机挂载</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a &amp;&amp; sysctl -w vm.swappiness=0 </span><br><span class="line">sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab</span><br></pre></td></tr></table></figure>
 <p>设置路由</p>
@@ -132,7 +140,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/" data-id="cjxo3e5e2000bx4id9015sy3l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/" data-id="cjxo3r2os000mwkidrn6icbfv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kubernetes/">kubernetes</a></li></ul>

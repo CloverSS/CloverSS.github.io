@@ -90,46 +90,24 @@
 <p>kubernetes版本：v1.15.0</p>
 <h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><p>Master、node节点安装docker</p>
 <p>安装相关依赖</p>
-<figure class="highlight plain"><figcaption><span>install -y yum-utils device-mapper-persistent-data lvm2```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">添加官方yum库</span><br><span class="line"></span><br><span class="line">```yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></table></figure>
+<p>添加官方yum库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
 <p>安装docker</p>
-<figure class="highlight plain"><figcaption><span>install docker-ce```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">查看docker版本</span><br><span class="line"></span><br><span class="line">```docker version</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker-ce</span><br></pre></td></tr></table></figure>
+<p>查看docker版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></table></figure>
 <p>启动docker服务</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">service docker start</span><br></pre></td></tr></table></figure>
-<p>运行hello world测试docker是否安装成功</p>
-<figure class="highlight docker"><figcaption><span>run hello-world```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">若安装成功会有输出：</span><br></pre></td></tr></table></figure>
-<p>Unable to find image ‘hello-world:latest’ locally<br>latest: Pulling from library/hello-world<br>1b930d010525: Pull complete<br>Digest: sha256:41a65640635299bab090f783209c1e3a3f11934cf7756b09cb2f1e02147c6ed8<br>Status: Downloaded newer image for hello-world:latest</p>
-<p>Hello from Docker!<br>This message shows that your installation appears to be working correctly.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">docker安装成功</span><br><span class="line"></span><br><span class="line">## 系统设置</span><br><span class="line"></span><br><span class="line">关闭SeLinux</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">setenforce 0</span><br><span class="line">sed -i &apos;s/^SELINUX=enforcing$/SELINUX=permissive/&apos; /etc/selinux/config</span><br></pre></td></tr></table></figure></p>
-<p>关闭swap，取消开机挂载</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a &amp;&amp; sysctl -w vm.swappiness=0 </span><br><span class="line">sed -ri '/^[^#]*swap/s@^@#@' /etc/fstab</span><br></pre></td></tr></table></figure>
-<p>设置路由</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt;  /etc/sysctl.d/k8s.conf</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">EOF</span><br><span class="line">sysctl --system  # 重新加载所有配置文件</span><br></pre></td></tr></table></figure>
-<h2 id="安装kubelet-kubeadm-kubectl"><a href="#安装kubelet-kubeadm-kubectl" class="headerlink" title="安装kubelet kubeadm kubectl"></a>安装kubelet kubeadm kubectl</h2><p>master、node节点安装kubelet、kubeadm、kubectl</p>
-<p>这里使用阿里源，修改源文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">repo_gpgcheck=0</span><br><span class="line">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">        http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<p>安装kubelet kubeadm kubectl</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes</span><br></pre></td></tr></table></figure>
-<p>启动kubelet</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet</span><br><span class="line">systemctl start kubelet</span><br></pre></td></tr></table></figure>
-<h2 id="拉取所需镜像"><a href="#拉取所需镜像" class="headerlink" title="拉取所需镜像"></a>拉取所需镜像</h2><p>从国内源拉取所需镜像并更改tag，执行脚本：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">images=(</span><br><span class="line">    kube-apiserver:v1.15.0</span><br><span class="line">    kube-controller-manager:v1.15.0</span><br><span class="line">    kube-scheduler:v1.15.0</span><br><span class="line">    kube-proxy:v1.15.0</span><br><span class="line">    pause:3.1</span><br><span class="line">    etcd:3.3.10</span><br><span class="line">    coredns:1.3.1</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">for imageName in $&#123;images[@]&#125; ; do</span><br><span class="line">    docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName</span><br><span class="line">    docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName k8s.gcr.io/$imageName</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-<h2 id="使用kubeadm创建集群"><a href="#使用kubeadm创建集群" class="headerlink" title="使用kubeadm创建集群"></a>使用kubeadm创建集群</h2><p>在master节点上执行kubeadm init创建集群：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --apiserver-advertise-address &lt;master IP&gt; --pod-network-cidr 10.244.0.0/16  --kubernetes-version 1.15.0</span><br></pre></td></tr></table></figure>
-<p>创建成功后会显示：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p $HOME/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 192.168.106.168:6443 --token our9a0.zl490imi6t81tn5u \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:b93f710eb9b389a69f0cd0d6dcf7c82e389a68f009eb6b2028f69d54b099de16</span><br></pre></td></tr></table></figure>
-<p>根据上述提示创建kubenetes配置文件。</p>
-<p>应用flannel网络:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
-<p>之后node节点可以根据token加入集群，token默认失效时间是24h，可以创建新的token：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubelet token create #创建token</span><br><span class="line">kubelet token list   #打印token</span><br></pre></td></tr></table></figure>
-<h2 id="node节点加入集群"><a href="#node节点加入集群" class="headerlink" title="node节点加入集群"></a>node节点加入集群</h2><p>node节点根据token加入集群：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm join 192.168.106.168:6443 --token our9a0.zl490imi6t81tn5u --discovery-token-ca-cert-hash sha256:b93f710eb9b389a69f0cd0d6dcf7c82e389a68f009eb6b2028f69d54b099de16</span><br></pre></td></tr></table></figure>
-<p>查看集群状态，加入成功后显示ready:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl get nodes</span><br><span class="line">NAME                    STATUS   ROLES    AGE     VERSION</span><br><span class="line">licr1                   Ready    master   6d12h   v1.15.0</span><br><span class="line">localhost.localdomain   Ready    &lt;none&gt;   61m     v1.15.0</span><br><span class="line">provider-small          Ready    &lt;none&gt;   5d22h   v1.15.0</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">service docker start</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2019/07/04/使用kubeadm搭建kubernetes集群/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/" data-id="cjxo3e5e2000bx4id9015sy3l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/" data-id="cjxo3r2os000mwkidrn6icbfv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kubernetes/">kubernetes</a></li></ul>
@@ -186,7 +164,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjxo3e5f5000nx4id41nayioa" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjxo3r2p6000qwkid1za1dirl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
@@ -231,7 +209,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjxo3e5f9000rx4idtoxyn73q" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjxo3r2ok000gwkidqacacen5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -276,7 +254,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjxo3e5f8000qx4id16rsjyqt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjxo3r2oj000ewkid7ld0epn3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -321,7 +299,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjxo3e5ee000gx4idg0zvi9ww" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjxo3r2oh000cwkidsoi0r8zr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -366,7 +344,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjxo3e5e00009x4idez8rjpq0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjxo3r2oe000awkidpwgqijfa" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -411,7 +389,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjxo3e5dx0006x4id4l8c95vi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjxo3r2oo000iwkidpazad4m4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -457,7 +435,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjxo3e5e4000ex4idtfgvktrp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjxo3r2oc0008wkidv03opkc3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -502,7 +480,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjxo3e5de0001x4idfpotvymr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjxo3r2oa0007wkidjqqu0yux" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -547,7 +525,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/" data-id="cjxo3e5dq0002x4idkq7ncn6z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-46-Permutations-m/" data-id="cjxo3r2nq0002wkid8ip8ymbd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
