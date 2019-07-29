@@ -5,15 +5,22 @@
   
 
   
-  <title>Hexo</title>
+  <title>kubernetes概念明晰 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="Kubernetes简介从容器技术开始​    容器是一种轻量级、可移植、自包含的软件打包技术。以docker为例，Docker可以将几乎任何应用程序及其依赖的运行环境都打包成一个容器，并能够运行于支持Docker容器引擎的所有操作系统之上。Docker本身常适合用于管理单个容器，然而真正的生产型应用会涉及多个容器，这些容器必须跨多个服务器主机进行部署。于是，以Kubernetes为代表的容器编排">
+<meta name="keywords" content="kubernetes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kubernetes概念明晰">
+<meta property="og:url" content="http://yoursite.com/2019/07/29/kubernetes概念明晰/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Kubernetes简介从容器技术开始​    容器是一种轻量级、可移植、自包含的软件打包技术。以docker为例，Docker可以将几乎任何应用程序及其依赖的运行环境都打包成一个容器，并能够运行于支持Docker容器引擎的所有操作系统之上。Docker本身常适合用于管理单个容器，然而真正的生产型应用会涉及多个容器，这些容器必须跨多个服务器主机进行部署。于是，以Kubernetes为代表的容器编排">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="c:/Users/licr/AppData/Roaming/Typora/typora-user-images/1563447759383.png">
+<meta property="og:updated_time" content="2019-07-29T14:16:15.593Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="kubernetes概念明晰">
+<meta name="twitter:description" content="Kubernetes简介从容器技术开始​    容器是一种轻量级、可移植、自包含的软件打包技术。以docker为例，Docker可以将几乎任何应用程序及其依赖的运行环境都打包成一个容器，并能够运行于支持Docker容器引擎的所有操作系统之上。Docker本身常适合用于管理单个容器，然而真正的生产型应用会涉及多个容器，这些容器必须跨多个服务器主机进行部署。于是，以Kubernetes为代表的容器编排">
+<meta name="twitter:image" content="c:/Users/licr/AppData/Roaming/Typora/typora-user-images/1563447759383.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,9 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-kubernetes概念明晰" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-kubernetes概念明晰" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/29/kubernetes概念明晰/" class="article-date">
   <time datetime="2019-07-29T14:14:35.000Z" itemprop="datePublished">2019-07-29</time>
@@ -75,8 +80,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/29/kubernetes概念明晰/">kubernetes概念明晰</a>
+    <h1 class="article-title" itemprop="name">
+      kubernetes概念明晰
     </h1>
   
 
@@ -164,446 +169,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-使用kubeadm搭建kubernetes集群" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/04/使用kubeadm搭建kubernetes集群/" class="article-date">
-  <time datetime="2019-07-04T03:09:26.000Z" itemprop="datePublished">2019-07-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/04/使用kubeadm搭建kubernetes集群/">使用kubeadm搭建kubernetes集群</a>
-    </h1>
+    <a href="/2019/07/04/使用kubeadm搭建kubernetes集群/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用kubeadm搭建kubernetes集群</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用kubernetes提供的kubeadm工具快速创建一个kubernetes集群</p>
-<p>系统版本：CentOs7</p>
-<p>docker版本：18.09.*</p>
-<p>kubernetes版本：v1.15.0</p>
-<h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><p>Master、node节点安装docker</p>
-<p>安装相关依赖</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></table></figure>
-<p>添加官方yum库</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
-<p>安装docker</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker-ce</span><br></pre></td></tr></table></figure>
-<p>查看docker版本</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></table></figure>
-<p>启动docker服务</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">service docker start</span><br></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2019/07/04/使用kubeadm搭建kubernetes集群/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/" data-id="cjyoh8r92000q8sidskopy4on" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kubernetes/">kubernetes</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-zookeeper浅析" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/05/27/zookeeper浅析/" class="article-date">
-  <time datetime="2019-05-27T13:49:55.000Z" itemprop="datePublished">2019-05-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/27/zookeeper浅析/">zookeeper浅析</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1、zookeeper是什么"><a href="#1、zookeeper是什么" class="headerlink" title="1、zookeeper是什么"></a>1、zookeeper是什么</h2><p>zookeeper是一个典型的分布式数据一致性解决方案。zookeeper致力于提供一个高性能、高可用、具有严格的顺序访问控制能力（主要是写操作的严格顺序性）的分布式协调服务。其设计目标是将那些复杂且容易出错的分布式一致性服务封装起来，构成一个高效可靠的原语集，并以一系列简单易用的借口提供给用户使用。<br>zookeeper四个设计目标：</p>
-<ul>
-<li>简单的数据模型</li>
-<li>可以构建集群</li>
-<li>顺序访问</li>
-<li>高性能</li>
-</ul>
-<h2 id="2、zookeeper中几个基本概念"><a href="#2、zookeeper中几个基本概念" class="headerlink" title="2、zookeeper中几个基本概念"></a>2、zookeeper中几个基本概念</h2><ul>
-<li><p>集群角色<br>zookeeper中没有使用传统的Master/Slave概念，而是引入了Leader、Follower和Observer三种角色。集群中的所有机器通过选举来确定”Leader”,Leader为客户端提供读写服务，Observer和Follower提供读服务，但Observer机器布参与Leader选举过程，也不参与写操作的”过半写成功”策略。</p>
-</li>
-<li><p>会话（Session）<br> ZooKeeper中，一个客户端连接是指客户端和服务器之间的一个TCP长连接。客户端在启动时与服务器建立连接，与服务器保持有效的会话。会话通过保持一个sessionTimeout值来设置一个客户端会话的超时时间。当客户端连接断开时，只要在sessionTimeout规定的时间内能够重新连接上集群中任意一台服务器，那么之前创建的会话仍然有效。</p>
-</li>
-<li><p>数据节点（Znode）<br> 数据模型中的数据单元被称之为数据节点–ZNode。ZooKeeper将所有数据存储在内存中，数据模型是一棵树（ZNode Tree）。在ZooKeeper中，ZNode可以分为持久节点和临时节点两类。</p>
-</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2019/05/27/zookeeper浅析/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjyoh8r9d000t8sidmmirhyn8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-54-Spiral-Matrix-m" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/06/leetcode-54-Spiral-Matrix-m/" class="article-date">
-  <time datetime="2019-03-06T13:54:26.000Z" itemprop="datePublished">2019-03-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/06/leetcode-54-Spiral-Matrix-m/">leetcode-54.Spiral Matrix-m</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://leetcode.com/problems/spiral-matrix/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.</p>
-<p>Example 1:</p>
-<p>Input:<br>[<br> [ 1, 2, 3 ],<br> [ 4, 5, 6 ],<br> [ 7, 8, 9 ]<br>]<br>Output: [1,2,3,6,9,8,7,4,5]</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/06/leetcode-54-Spiral-Matrix-m/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjyoh8r8k000g8sidjt55bs78" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-53-Maximum-Subarray-e" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/06/leetcode-53-Maximum-Subarray-e/" class="article-date">
-  <time datetime="2019-03-06T01:27:10.000Z" itemprop="datePublished">2019-03-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/06/leetcode-53-Maximum-Subarray-e/">leetcode-53. Maximum Subarray-e</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://leetcode.com/problems/maximum-subarray/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.</p>
-<p>Example:</p>
-<p>Input: [-2,1,-3,4,-1,2,1,-5,4],<br>Output: 6<br>Explanation: [4,-1,2,1] has the largest sum = 6.</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/06/leetcode-53-Maximum-Subarray-e/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjyoh8r91000p8sidl6yb0t50" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-51-52-N-Queens-h" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/05/leetcode-51-52-N-Queens-h/" class="article-date">
-  <time datetime="2019-03-05T03:14:19.000Z" itemprop="datePublished">2019-03-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/05/leetcode-51-52-N-Queens-h/">leetcode-51/52.N-Queens-h</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://leetcode.com/problems/n-queens/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.</p>
-<p>Given an integer n, return all distinct solutions to the n-queens puzzle.</p>
-<p>Each solution contains a distinct board configuration of the n-queens’ placement, where ‘Q’ and ‘.’ both indicate a queen and an empty space respectively. </p>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/05/leetcode-51-52-N-Queens-h/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjyoh8r8e000e8sidigd3a16p" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-50-Pow-x-n-m" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/03/leetcode-50-Pow-x-n-m/" class="article-date">
-  <time datetime="2019-03-03T08:07:40.000Z" itemprop="datePublished">2019-03-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/03/leetcode-50-Pow-x-n-m/">leetcode-50.Pow(x, n)-m</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://leetcode.com/problems/powx-n/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Implement pow(x, n), which calculates x raised to the power n (xn).</p>
-<p>Example 1:</p>
-<p>Input: 2.00000, 10<br>Output: 1024.00000<br>Example 2:</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/03/leetcode-50-Pow-x-n-m/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjyoh8r8800068sid1usho1mq" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-49-Group-Anagrams-m" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/03/leetcode-49-Group-Anagrams-m/" class="article-date">
-  <time datetime="2019-03-03T07:47:55.000Z" itemprop="datePublished">2019-03-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/03/leetcode-49-Group-Anagrams-m/">leetcode-49.Group Anagrams-m</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://leetcode.com/problems/group-anagrams/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given an array of strings, group anagrams together.</p>
-<p>Example:</p>
-<p>Input: [“eat”, “tea”, “tan”, “ate”, “nat”, “bat”],<br>Output:<br>[<br>  [“ate”,”eat”,”tea”],<br>  [“nat”,”tan”],<br>  [“bat”]<br>]</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/03/leetcode-49-Group-Anagrams-m/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjyoh8r8700058sid2tea5f2s" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-48-Rotate-Image-m" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/02/leetcode-48-Rotate-Image-m/" class="article-date">
-  <time datetime="2019-03-02T04:50:09.000Z" itemprop="datePublished">2019-03-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/02/leetcode-48-Rotate-Image-m/">leetcode-48.Rotate Image-m</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://leetcode.com/problems/rotate-image/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>You are given an n x n 2D matrix representing an image.</p>
-<p>Rotate the image by 90 degrees (clockwise).</p>
-<p>Note:</p>
-<p>You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/02/leetcode-48-Rotate-Image-m/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjyoh8r8c000b8sidhk0iyrh8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-47-Permutations-II-m" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/02/28/leetcode-47-Permutations-II-m/" class="article-date">
-  <time datetime="2019-02-28T11:28:16.000Z" itemprop="datePublished">2019-02-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/28/leetcode-47-Permutations-II-m/">leetcode-47.Permutations II-m</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://leetcode.com/problems/permutations-ii/" target="_blank" rel="noopener">题目链接</a><br><strong>Description</strong><br>Given a collection of numbers that might contain duplicates, return all possible unique permutations.</p>
-<p>Example:</p>
-<p>Input: [1,1,2]<br>Output:<br>[<br>  [1,1,2],<br>  [1,2,1],<br>  [2,1,1]<br>]<br>
-        
-          </p><p class="article-more-link">
-            <a href="/2019/02/28/leetcode-47-Permutations-II-m/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjyoh8r8500048sidndsxrlzl" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
-
-  <nav id="page-nav">
-    
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-  </nav>
 
 </section>
         
