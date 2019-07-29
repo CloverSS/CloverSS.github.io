@@ -16,7 +16,7 @@
 <meta property="og:description" content="Kubernetes简介从容器技术开始​    容器是一种轻量级、可移植、自包含的软件打包技术。以docker为例，Docker可以将几乎任何应用程序及其依赖的运行环境都打包成一个容器，并能够运行于支持Docker容器引擎的所有操作系统之上。Docker本身常适合用于管理单个容器，然而真正的生产型应用会涉及多个容器，这些容器必须跨多个服务器主机进行部署。于是，以Kubernetes为代表的容器编排">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="c:/Users/licr/AppData/Roaming/Typora/typora-user-images/1563447759383.png">
-<meta property="og:updated_time" content="2019-07-29T14:16:15.593Z">
+<meta property="og:updated_time" content="2019-07-29T14:20:53.490Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kubernetes概念明晰">
 <meta name="twitter:description" content="Kubernetes简介从容器技术开始​    容器是一种轻量级、可移植、自包含的软件打包技术。以docker为例，Docker可以将几乎任何应用程序及其依赖的运行环境都打包成一个容器，并能够运行于支持Docker容器引擎的所有操作系统之上。Docker本身常适合用于管理单个容器，然而真正的生产型应用会涉及多个容器，这些容器必须跨多个服务器主机进行部署。于是，以Kubernetes为代表的容器编排">
@@ -117,6 +117,7 @@
 <p>​    API Server确认Pod对象的创建请求之后，便需要由Scheduler根据集群内各节点的可用资源状态，以及要运行的容器的资源需求做出调度决策。Kubernetes支持自定义调度器。</p>
 </li>
 </ol>
+<a id="more"></a>
 <h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><ol>
 <li><p><strong>kubelet</strong></p>
 <p>​    kubelet是运行于工作节点之上的守护进程，它从API Server接收关于Pod对象的配置信息并确保它们处于期望的状态。kubelet会在API Server上注册当前工作节点，定期向Master汇报节点资源使用情况，并通过cAdvisor监控容器和节点的资源占用状况。</p>
@@ -161,7 +162,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/29/kubernetes概念明晰/" data-id="cjyoh8r8m000i8sidcvn29uaq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/29/kubernetes概念明晰/" data-id="cjyohczkk000q34idcism8hxz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kubernetes/">kubernetes</a></li></ul>

@@ -112,51 +112,15 @@
 <p>​    API Server确认Pod对象的创建请求之后，便需要由Scheduler根据集群内各节点的可用资源状态，以及要运行的容器的资源需求做出调度决策。Kubernetes支持自定义调度器。</p>
 </li>
 </ol>
-<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><ol>
-<li><p><strong>kubelet</strong></p>
-<p>​    kubelet是运行于工作节点之上的守护进程，它从API Server接收关于Pod对象的配置信息并确保它们处于期望的状态。kubelet会在API Server上注册当前工作节点，定期向Master汇报节点资源使用情况，并通过cAdvisor监控容器和节点的资源占用状况。</p>
-</li>
-<li><p><strong>kube-proxy</strong></p>
-<p>​    kube-proxy守护进程，它能够按需为Service资源对象生成iptables或ipvs规则，从而捕获访问当前Service的ClusterIP的流量并将其转发至正确的后端Pod对象。</p>
-</li>
-</ol>
-<h3 id="核心附件"><a href="#核心附件" class="headerlink" title="核心附件"></a>核心附件</h3><ol>
-<li><p><strong>KubeDNS</strong></p>
-<p>​    在Kubernetes集群中调度运行提供DNS服务的Pod，同一集群中的其他Pod可使用此DNS服务解决主机名。</p>
-</li>
-<li><p><strong>Kubernetes Dashboard</strong></p>
-<p>​    基于Web UI进行集群管理。    </p>
-</li>
-</ol>
-<h2 id="Pod控制器"><a href="#Pod控制器" class="headerlink" title="Pod控制器"></a>Pod控制器</h2><p>​    我们可以把API Server类比成一个存储对象的数据库系统，它向客户端提供了API，并负责存储由用户创建的各种资源对象，基于各对象的当前状态如何才能符合用户期望的状态，则需要交由另一类称为控制器的组件来负责完成。Kubernetes提供了众多的控制器来管理各种类型的资源，每一个控制器对象都可以通过内部的和解循环（reconciliation loop），不间断地监控着由其负责的所有资源并确保其处于或不断地逼近用户定义的目标状态。</p>
-<p>​    Pod控制器资源通过持续性地监控集群中运行着的Pod资源对象来确保受其管控的资源严格符合用户期望的状态，例如资源副本的数量要精确符合期望等。通常，一个Pod控制器资源至少应该包含三个基本的组成部分。</p>
-<ul>
-<li>标签选择器：匹配并关联Pod资源对象，并据此完成受其管控的Pod资源计数。</li>
-<li>期望的副本数：期望在集群中精确运行着的Pod资源的对象数量。</li>
-<li>Pod模板：用于新建Pod资源对象的Pod模板资源。</li>
-</ul>
-<h3 id="ReplicaSet"><a href="#ReplicaSet" class="headerlink" title="ReplicaSet"></a>ReplicaSet</h3><p>​    ReplicaSet（简称RS）是Pod控制器类型的一种实现，用于确保由其管控的Pod对象副本数在任.时刻都能精确满足期望的数量。ReplicaSet控制器资源启动后会查找集群中匹配其标签选择器的Pod资源对象，当前活动对象的数量与期望的数量不吻合时，多则删除，少则通过Pod模板创建以补充，等Pod资源副本数量符合期望值后即进行下一轮和解循环。</p>
-<p>​    然而，有时我们需要对RS进行改动，常见的有改动Pod模板及修改副本数量。改动Pod模板的定义对已经创建完成的活动对象失效，但在用户逐个自动关闭其旧版本的Pod资源后就能以新代旧，实现控制器下应用版本的滚动升级。修改副本的数量也就意味着应用规模的扩展（提升期望的副本数量）或收缩（降低期望的副本数量）。</p>
-<h3 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h3><p>​    它构建于ReplicaSet控制器之上，可为Pod和ReplicaSet资源提供声明式更新。相比较而言，Pod和ReplicaSet是较低级别的资源，它们很少被直接使用。Deployment支持事件和状态查看，回滚，版本记录，暂停和启动，多种自动更新方案。</p>
-<h3 id="StatefulSet"><a href="#StatefulSet" class="headerlink" title="StatefulSet"></a>StatefulSet</h3><p>​    利用Deployment等其他控制器创建的pod实例副本没有本质的差别，互相之间也没有联系。然而对于很多分布式的应用来说，应用本身就是分布式的集群，各应用实例彼此之间存在着关联关系，甚至是角色的相关性，其中每个实例都有其自身的独特性而无法轻易由其他实例所取代。StatefulSet专门用来管理有状态应用。设计有状态应用程序时需要着重考虑的另一个问题是数据持久存储的位置，在应用程序所在的节点发生故障后依然需要确保数据可被访问的场景就需要一个外部的持久存储系统，否则使用节点本地存储卷即可。</p>
-<p>​    StatefulSet支持每个Pod对象一个专有索引、有序部署、有序终止、固定的标识符及固定的存储卷等特性。一般来说，一个典型、完整可用的StatefulSet通常由三个组件构成：Headless Service、StatefulSet和volumeClaimTemplate。</p>
-<h3 id="DaemonSet"><a href="#DaemonSet" class="headerlink" title="DaemonSet"></a>DaemonSet</h3><p>​    用于在集群中的全部节点上同时运行一份指定的Pod资源副本，后续新加入集群的工作节点也会自动创建一个相关的Pod对象，当从集群移除节点时，此类Pod对象也将被自动回收且无须重建。管理员也可以使用节点选择器及节点标签指定仅在部分具有特定特征的节点上运行指定的Pod对象。</p>
-<p>​    DaemonSet的用途主要有：运行集群存储的守护进程，如在各个节点上运行glusterd或ceph。在各个节点上运行日志收集守护进程，如fluentd和logstash。在各个节点上运行监控系统的代理守护进程，如Prometheus Node<br>Exporter、collectd、Datadog agent、New Relic agent或Ganglia gmond等。</p>
-<h3 id="Job"><a href="#Job" class="headerlink" title="Job"></a>Job</h3><p>​    与Deployment及DaemonSet控制器管理的守护进程类的服务应用不同的是，Job控制器用于调配Pod对象运行一次性任务，容器中的进程在正常运行结束后不会对其进行重启，而是将Pod对象置于“Completed”（完成）状态。若容器中的进程因错误而终止，则需要依配置确定重启与否，未运行完成的Pod对象因其所在的节点故障导致意外终止后会被重新调度。</p>
-<h3 id="CronJob"><a href="#CronJob" class="headerlink" title="CronJob"></a>CronJob</h3><p>​    CronJob控制器用于管理Job控制器资源的运行时间。Job控制器定义的作业任务在其控制器资源创建之后便会立即执，但CronJob可以以类似于Linux操作系统的周期性任务作业计划（crontab）的方式控制其运行的时间点及重复运行的方式。</p>
-<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p>​    尽管Pod对象可以拥有IP地址，但此地址无法确保在Pod对象重启或被重建后保持不变，这会为集群中的Pod应用间依赖关系的维护带来麻烦：前端Pod应用基于固定地址持续跟踪后端Pod应用。于是，Service资源被用于在被访问的Pod对象中添加一个有着固定IP地址的中间层，客户端向此地址发起访问请求后由相关的Service资源调度并代理后端的Pod对象。</p>
-<p>​    简单来讲，一个Service对象就是工作节点上的一些iptables或ipvs规则，用于将到达Service对象IP地址的流量调度转发至相应的Endpoints对象指向的IP地址和端⼜之上。</p>
-<p>​    Service主要有三种常用类型：第一种是仅用于集群内部通信的ClusterIP类型；第二种是接收集群外部请求的NodePort类型，它工作于每个节点的主机IP之上；第三种是LoadBalancer类型，它可以把外部请求负载均衡到多个Node的主机IP的NodePort之上。</p>
-<h2 id="存储卷和数据持久化"><a href="#存储卷和数据持久化" class="headerlink" title="存储卷和数据持久化"></a>存储卷和数据持久化</h2><p>​    Pod本身具有生命周期，故其内部运行的容器及其相关数据均无法持久存在。Docker支持配置容器使用存储卷将数据持久存储于容器之外的存储空间中，它们可以是节点文件系统或网络文件系统之上的存储空间。相应地，Kubernetes也支持类似的存储卷功能，不过，其存储卷是与Pod资源绑定而非容器。简单来说，存储卷是定义在Pod资源之上、可被其内部的所有容器挂载的共享目录，它关联在某外部的存储设备之上的存储空间，从而独立于容器运行的文件系统，而数据是否具有持久能力则取决于存储卷本身是否支持持久机制。</p>
-<p>​    hostPath属于节点级别的卷类型，POD经过重新调度后无法使用之前的存储数据。要想使用持久类型的存储卷，就得使用网络存储系统，如NFS、Ceph、GlusterFS等，或者云端存储，如gcePersistentDisk，awsElasticBlockStore等。</p>
-<p>​    Kubernetes为此专门设计了一种集群级别的资源PersistentVolume（简称PV），它借由管理员配置存储<br>系统，然后由用户通过“persistentVolumeClaim”（简称PVC）存储卷直接申请使用的机制.</p>
-<h2 id="kubernetes网络通信"><a href="#kubernetes网络通信" class="headerlink" title="kubernetes网络通信"></a>kubernetes网络通信</h2><h3 id="kubernetes网络模型概述"><a href="#kubernetes网络模型概述" class="headerlink" title="kubernetes网络模型概述"></a>kubernetes网络模型概述</h3><p>​    Kubernetes的网络中主要存在四种类型的通信：同一Pod内的容器间通信、各Pod彼此之间的通信、Pod与Service间的通信，以及集群外部的流量同Service之间的通信。</p>
-<h2 id="helm包管理程序"><a href="#helm包管理程序" class="headerlink" title="helm包管理程序"></a>helm包管理程序</h2><h2 id="attention"><a href="#attention" class="headerlink" title="attention"></a>attention</h2><p>​    需要注意的是，在实际的应用场景中，在接收到的请求流量负载显著低于或接近于已有Pod副本的整体承载能力时，用户需要手动修改Pod控制器中的期望副本数量以实现应用规模的扩容或缩容。不过，若集群中部署了HeapSter或Prometheus一类的资源指标监控附件时，用户还可以使用“HorizontalPodAutoscaler”（HPA）计算出合适的Pod副本数量，并手动修改Pod控制器中期望的副本数以实现应用规模的动态伸缩，提高集群资源利用率。</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2019/07/29/kubernetes概念明晰/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/29/kubernetes概念明晰/" data-id="cjyoh8r8m000i8sidcvn29uaq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/29/kubernetes概念明晰/" data-id="cjyohczkk000q34idcism8hxz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kubernetes/">kubernetes</a></li></ul>
@@ -213,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/" data-id="cjyoh8r92000q8sidskopy4on" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/04/使用kubeadm搭建kubernetes集群/" data-id="cjyohczkc000i34idzgdo9qik" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kubernetes/">kubernetes</a></li></ul>
@@ -270,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjyoh8r9d000t8sidmmirhyn8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/27/zookeeper浅析/" data-id="cjyohczkl000s34idlp445pr5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
@@ -315,7 +279,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjyoh8r8k000g8sidjt55bs78" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-54-Spiral-Matrix-m/" data-id="cjyohczka000g34idt1gsuggx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -360,7 +324,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjyoh8r91000p8sidl6yb0t50" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/06/leetcode-53-Maximum-Subarray-e/" data-id="cjyohczk7000e34idzkuzzvzq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -405,7 +369,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjyoh8r8e000e8sidigd3a16p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/05/leetcode-51-52-N-Queens-h/" data-id="cjyohczk5000b34ids3qn2vqe" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -450,7 +414,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjyoh8r8800068sid1usho1mq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-50-Pow-x-n-m/" data-id="cjyohczk4000934idfjxxajbu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -495,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjyoh8r8700058sid2tea5f2s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/03/leetcode-49-Group-Anagrams-m/" data-id="cjyohczk1000634idecjh335q" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -541,7 +505,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjyoh8r8c000b8sidhk0iyrh8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/02/leetcode-48-Rotate-Image-m/" data-id="cjyohczk0000534idr0hbj9je" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
@@ -586,7 +550,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjyoh8r8500048sidndsxrlzl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/02/28/leetcode-47-Permutations-II-m/" data-id="cjyohczjz000434idv8det8ca" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leetcode/">leetcode</a></li></ul>
